@@ -114,7 +114,7 @@ namespace SocketTestClient
 #if SERVER_SIDE
             mcServer = new MutualCommunication("192.168.21.147", 12347);
             mcServer.ServerListen();
-            //mcServer.RaiseMsgRcvEvent += new MutualCommunication.MessageReceivedEventHandler(mcServer_RaiseMsgRcvEvent);
+            mcServer.RaiseMsgRcvEvent += new MutualCommunication.MessageReceivedEventHandler(mcServer_RaiseMsgRcvEvent);
 #else
             mcClient = new MutualCommunication("192.168.21.147", 12347);
             mcClient.ClientConnect();
@@ -174,6 +174,26 @@ namespace SocketTestClient
 #else
 #endif
 
+        void mcServer_RaiseMsgRcvEvent(object sender, MessageReceivedArgs msgRcvArgs)
+        {
+            string dataRcv = msgRcvArgs.Message;
+            string[] dataArray = dataRcv.Split(new char[] { ' ' });
+            if (dataArray.Length > 0)
+            {
+                switch (dataArray[0])
+                {
+                    case "pt":
+                        if (targets.CurrentScheduleTable() != null)
+                        {
+                            NextSchedule();
+                        }
+                        else OneRoundEnd();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
         void config_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -473,6 +493,35 @@ namespace SocketTestClient
                     lData.LocalCount = 0;
                 }
             }
+        }
+
+        private void PointingExperimenterWithDistraction(TrackingData t, Point s)
+        {
+            if (targets.CurrentScheduleTable() != null)
+            {
+                bool c = (bool)(targets.CurrentScheduleTable());        //only display a target for the experimenter when the element in schedule table is TRUE
+                if (c && studyOnGoing && t.PositionZ > minZ && t.PositionZ < maxZ && targets.testTouch(s.X, s.Y))
+                {
+                   
+                }
+            }
+        }
+
+        private void NextSchedule()
+        {
+            targets.IncrementScheduleTable();
+            if (targets.CurrentScheduleTable() != null)
+            {
+                if ((bool)(targets.CurrentScheduleTable()) == true)
+                {
+                    Action work = delegate
+                    {
+                        targets.DisplayOneTarget();
+                    };
+                    this.Dispatcher.BeginInvoke(work, System.Windows.Threading.DispatcherPriority.Normal);
+                }
+            }
+            else OneRoundEnd();
         }
 
         private void OneRoundEnd()

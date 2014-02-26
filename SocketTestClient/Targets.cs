@@ -34,14 +34,17 @@ namespace SocketTestClient
         private int[] permutation;
         private int currentBackupIndex = number;
         static private int[] gridToAvoid = { 0, 1, 19, 20 }; //the grid coordinate of positions where we want to avoid because they are too close to the lamp.
+        //for gesturing task
         private int[,] distanceTable;
         private int currentAreaIndex;
-
         private int areaRadius; //radius of the area to be selected for each round, which is set to the average of the Manhattan distance between targets
 
-        //public event EventHandler OneRoundEnd;
-
-        
+        //for participant task
+        private bool?[] scheduleTable;
+        static private double factor = 2;
+        private int scheduleTableIndex = -1;
+        private Ellipse oneTarget;
+                
 
         public Targets()
         {
@@ -71,6 +74,72 @@ namespace SocketTestClient
 
             //initiate a 20 * 20 2d array to store the distances between targets
             distanceTable = new int[number, number];
+
+            //initiate a schedule table containing information of the relative proportion of targets between two sides
+            scheduleTable = new bool?[(int)(number * (factor + 1))];
+            Random r = new Random();
+            for (int i = 0; i < scheduleTable.Length; i++)
+            {
+                if (i < number) scheduleTable[i] = true;
+                else scheduleTable[i] = false;
+            }
+            for (int i = 0; i < scheduleTable.Length; i++)
+            {
+                int now = (int)(r.NextDouble() * i);
+                bool? temp = scheduleTable[i];
+                scheduleTable[i] = scheduleTable[now];
+                scheduleTable[now] = temp;
+            }
+
+            oneTarget = new Ellipse();
+            SolidColorBrush b = new SolidColorBrush(Colors.DarkGoldenrod);
+            oneTarget.Fill = b;
+            oneTarget.Width = size;
+            oneTarget.Height = size;
+            oneTarget.Stroke = new SolidColorBrush(Colors.Transparent);
+        }
+
+        public void IncrementScheduleTable()
+        {
+            scheduleTableIndex++;
+        }
+
+        public bool? CurrentScheduleTable()
+        {
+            if (scheduleTableIndex >= scheduleTable.Length) return null;
+            else return scheduleTable[scheduleTableIndex];
+        }
+
+        /// <summary>
+        /// Must be used in a dispatcher
+        /// </summary>
+        /// <param name="c"></param>
+        public void SetCanvas(Canvas c)
+        {
+            parent = c;
+            parent.Children.Add(oneTarget);
+            oneTarget.Visibility = Visibility.Hidden;
+        }
+
+
+        public void DisplayOneTarget()
+        {
+            if(parent != null)
+            {
+                if (currentPermutationIndex < permutation.Length)
+                {
+                    oneTarget.Visibility = Visibility.Visible;
+                    Point nextPosition = positionList[currentPermutationIndex];
+                    Canvas.SetLeft(oneTarget, nextPosition.X * size);
+                    Canvas.SetTop(oneTarget, nextPosition.Y * size);
+                }
+                else Console.WriteLine("permutation index error!");
+            }
+        }
+
+        public void HideOneTarget()
+        {
+            oneTarget.Visibility = Visibility.Hidden;
         }
 
         public void Shuffle()
@@ -288,9 +357,14 @@ namespace SocketTestClient
 
         private bool NextAreaOfTargets()
         {
-            currentPermutationIndex++;
-            currentIndex = permutation[currentPermutationIndex];
-            List<int> targetGroup = AdjacentTargets()
+            if (currentPermutationIndex++ < number)
+            {
+                currentIndex = permutation[currentPermutationIndex];
+                List<int> targetGroup = AdjacentTargets(currentIndex, areaRadius);
+                return true;
+            }
+            else return true;
+
         }
     }
 }
