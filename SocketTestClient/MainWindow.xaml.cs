@@ -1,4 +1,4 @@
-﻿#define SERVER_SIDE
+﻿#define NO_SERVER_SIDE
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,10 +29,10 @@ namespace SocketTestClient
     {
 #if SERVER_SIDE
         const int serverPort = 12345;
-        int maxZ = 90;
-        int minZ = 50;
-#else 
+#else
         const int serverPort = 12346;
+        const double minZ = -40;
+        const double maxZ = 0;
 #endif
         const string serverIPStr = "192.168.21.147";
         const int recvBufferSize = 1024;
@@ -56,16 +56,10 @@ namespace SocketTestClient
         bool remoteBeingUpdated = false;
         Logger logger;
         PatternGenerator pg;
-
-#if !SERVER_SIDE
-        Distractor dis;
-#endif
-
-#if SERVER_SIDE
-        MutualCommunication mcServer;
-#else
         MutualCommunication mcClient;
-#endif
+        //Distractor dis;
+
+        bool end = false;   //TRUE if the last target has been touched.
 
         //touch event handler
         public event EventHandler<TrackingEventArgs> RaiseTrackingEvent;
@@ -110,18 +104,6 @@ namespace SocketTestClient
             lData = new LogData();
             stopwatch = new Stopwatch();
 #endif
-
-#if SERVER_SIDE
-            mcServer = new MutualCommunication("192.168.21.147", 12347);
-            mcServer.ServerListen();
-            mcServer.RaiseMsgRcvEvent += new MutualCommunication.MessageReceivedEventHandler(mcServer_RaiseMsgRcvEvent);
-#else
-            mcClient = new MutualCommunication("192.168.21.147", 12347);
-            mcClient.ClientConnect();
-            mcClient.RaiseMsgRcvEvent += new MutualCommunication.MessageReceivedEventHandler(mcClient_RaiseMsgRcvEvent);
-
-#endif
-
             //initialize the visualization (null at the beginning) and the targets
             this.visualization = null;
             targets = new Targets();
@@ -131,15 +113,23 @@ namespace SocketTestClient
             //    Encoding.ASCII.GetString(bytes, 0, bytesRec));
             // this._json_text.Text = Encoding.ASCII.GetString(bytesReceived, 0, bytesRec);
 
+            mcClient = new MutualCommunication("192.168.21.147", 12347);
+            mcClient.ClientConnect();
+            mcClient.RaiseMsgRcvEvent += new MutualCommunication.MessageReceivedEventHandler(mcClient_RaiseMsgRcvEvent);
+
+            //dis = new Distractor();
+
+
             //a timer to see how many pakages are received per sec
+            /*
             this.tempTimer = new Timer(1000);
             this.tempTimer.Elapsed += new ElapsedEventHandler(tempTimer_Elapsed);
             this.tempTimer.Enabled = false;
+            */
 
-#if !SERVER_SIDE
-            dis = new Distractor();
-#endif
-
+            countDown = new Timer(1000);
+            countDown.Elapsed += new ElapsedEventHandler(countDown_Elapsed);
+            countDown.Enabled = false;
             // Release the socket.
             if (Keyboard.GetKeyStates(Key.Escape) == KeyStates.Down)
             {
@@ -148,7 +138,6 @@ namespace SocketTestClient
             }
         }
 
-#if !SERVER_SIDE
         void mcClient_RaiseMsgRcvEvent(object sender, MessageReceivedArgs msgRcvArgs)
         {
             string dataRcv = msgRcvArgs.Message;
@@ -157,33 +146,45 @@ namespace SocketTestClient
             {
                 switch (dataArray[0])
                 {
-                    case "n":
-                       string nextWord = dis.NextWord();
-                        _distractor.Text = nextWord;
-                    default:
+                    case "ps":
+                        //string nextWord = dis.NextWord();
+
+                        Action work = delegate
+                        {
+                            //targets.HideOneTarget();
+                            if (!end) targets.DisplayOneTarget();
+                            else targets.HideOneTarget();
+                        };
+                        this.Dispatcher.Invoke(work, System.Windows.Threading.DispatcherPriority.Normal);
                         break;
-                }
-            }
-        }
-
-#else
-#endif
-
-#if SERVER_SIDE
-
-#else
-#endif
-
-        void mcServer_RaiseMsgRcvEvent(object sender, MessageReceivedArgs msgRcvArgs)
-        {
-            string dataRcv = msgRcvArgs.Message;
-            string[] dataArray = dataRcv.Split(new char[] { ' ' });
-            if (dataArray.Length > 0)
-            {
-                switch (dataArray[0])
-                {
-                    case "pt":
-                        FetchSchedule();
+                    case "es":
+                        Action hideWork = delegate
+                        {
+                            targets.HideOneTarget();
+                        };
+                        this.Dispatcher.Invoke(hideWork, System.Windows.Threading.DispatcherPriority.Normal);
+                        break;
+                    case "esinit":
+                        Action work1 = delegate
+                        {
+                            targets.SetCanvas(_my_canvas);
+                            targets.Clear();
+                            targets.Shuffle();
+                        };
+                        this.Dispatcher.Invoke(work1, System.Windows.Threading.DispatcherPriority.Normal);
+                        break;
+                    case "psinit":
+                        Action work2 = delegate
+                        {
+                            targets.SetCanvas(_my_canvas);
+                            targets.Clear();
+                            targets.Shuffle();
+                            targets.DisplayOneTarget();
+                        };
+                        this.Dispatcher.Invoke(work2, System.Windows.Threading.DispatcherPriority.Normal);
+                        break;
+                    case "start":
+                        countDown.Start();
                         break;
                     default:
                         break;
@@ -308,7 +309,7 @@ namespace SocketTestClient
             double mapY = -1.2508;
             return new Point(1280 - (double)(tX * mapX - 94.3930), (double)(tY * mapY + 1119.2477));
 #else
-            double mapX = -1.3813;
+            double mapX = -1.3823;
             double mapY = -1.2667;
             return new Point(1280 - (double)(tX * mapX + 1307.9568), (double)(tY * mapY + 1128.9333));
 #endif
@@ -316,24 +317,101 @@ namespace SocketTestClient
 
         private void UpdateLocal(TrackingData pakage)
         {
-           
+
             Point screenCoordinate = MappingLocal(pakage.PositionX, pakage.PositionY);
-            Action displayAction = delegate
+            ParticipantWithDistraction(pakage, screenCoordinate);
+            
+            Action positionAction = delegate
             {
-                _position.Text = screenCoordinate.X.ToString() + "," + screenCoordinate.Y.ToString();
-                //_position.Text = pakage.PositionZ.ToString();
+                _position.Text = screenCoordinate.X.ToString() + "," + screenCoordinate.Y.ToString() + "," + pakage.PositionZ.ToString();
             };
-            this.Dispatcher.Invoke(displayAction, System.Windows.Threading.DispatcherPriority.Normal);
+            this.Dispatcher.BeginInvoke(positionAction, System.Windows.Threading.DispatcherPriority.Normal);
 #if SERVER_SIDE
-            PointingExperimenterWithDistraction(pakage, screenCoordinate);
+            /*
+            
+            this.Dispatcher.BeginInvoke(positionAction, System.Windows.Threading.DispatcherPriority.Normal);*/
+            if (studyOnGoing && pakage.PositionZ > -100 && pakage.PositionZ < -50 && targets.testTouch(screenCoordinate.X, screenCoordinate.Y)) // so that the pointer has touched the target
+            {
+                if(lData.LocalLogged && (!lData.RemoteLogged))
+                {
+                    lData.remoteX = 0;
+                    lData.remoteY = 0;
+                    lData.remoteTouchTime = 0;
+                    logger.LogLine(lData.GetStrings());
+                    Console.WriteLine("special logging, missing remote");
+                    lData.EverythingNull();
+                }
+                bool end = targets.NextMarker();
+                /*
+                Console.WriteLine("local localLogged: {0} remoteLogged : {1}", lData.LocalLogged, lData.RemoteLogged);
+                if (lData.LogLocalOrNot())
+                {
+                    lData.localX = pakage.PositionX;
+                    lData.localY = pakage.PositionY;
+                    lData.localTouchTime = stopwatch.ElapsedMilliseconds;
+                    targets.CurrentTargetGrid(ref lData.targetGridX, ref lData.targetGridY);
+                    lData.LocalLogged = true;
+                    Console.WriteLine("log local!");
+                }
+                else { Console.WriteLine("cannot log local!"); }
+                 */
+                localBeingUpdated = true;
+                if (end)
+                {
+                    OneRoundEnd();
+                }
+                else
+                {
+                    Action workAction = delegate
+                    {
+                        targets.MoveMarker();
+                    };
+                    this.Dispatcher.BeginInvoke(workAction, System.Windows.Threading.DispatcherPriority.Normal);
+                }
+            }
+            if (localBeingUpdated)
+            {
+                lData.LocalReady = true;
+                if (lData.compareLocal(pakage.PositionZ))
+                {
+                    lData.localX = pakage.PositionX;
+                    lData.localY = pakage.PositionY;
+                    lData.localTouchTime = stopwatch.ElapsedMilliseconds;
+                    targets.CurrentTargetGrid(ref lData.targetGridX, ref lData.targetGridY);
+                }
+                if (lData.LocalCount == 1)
+                {
+                    Console.WriteLine("local 30 times! Stop tracking local!");
+                    localBeingUpdated = false;
+                    lData.LocalLogged = true;
+                    lData.LocalCount = 0;
+                }
+            }
 #endif
+        }
+
+
+        private void ParticipantWithDistraction(TrackingData t, Point p)
+        {
+            if (studyOnGoing && t.PositionZ < maxZ && t.PositionZ > minZ && targets.testTouch(p.X, p.Y))
+            {
+                end = targets.NextOneTarget();
+                mcClient.Send(mcClient.clientStateObject.workSocket, "pt");
+                Console.WriteLine("d!");
+            }
         }
 
         private void UpdateRemote(TrackingData pakage)
         {
             Point screenCoordinate = MappingRemote(pakage.PositionX, pakage.PositionY);
-            
-#if !SERVER_SIDE            
+            /*
+            Action work = delegate
+            {
+                if (pakage.PositionZ > -100) _position.Text = "";
+            };
+            this.Dispatcher.BeginInvoke(work, System.Windows.Threading.DispatcherPriority.Normal);
+            */
+#if !SERVER_SIDE
             Action workAction = delegate
             {
 
@@ -406,133 +484,6 @@ namespace SocketTestClient
 #endif
         }
 
-
-
-        private void OnRaiseTrackingEvent(TrackingEventArgs e)
-        {
-            EventHandler<TrackingEventArgs> handler = RaiseTrackingEvent;
-
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        #region Pointing Study
-        private void PointingExperimenter(TrackingData t, Point s)
-        {
-            /*
-           Action positionAction = delegate
-           {
-               _position.Text = pakage.PositionZ.ToString();
-           };
-           this.Dispatcher.BeginInvoke(positionAction, System.Windows.Threading.DispatcherPriority.Normal);*/
-            if (studyOnGoing && t.PositionZ > minZ && t.PositionZ < maxZ && targets.testTouch(s.X, s.Y)) // so that the pointer has touched the target
-            {
-                if (lData.LocalLogged && (!lData.RemoteLogged))
-                {
-                    lData.remoteX = 0;
-                    lData.remoteY = 0;
-                    lData.remoteTouchTime = 0;
-                    logger.LogLine(lData.GetStrings());
-                    Console.WriteLine("special logging, missing remote");
-                    lData.EverythingNull();
-                }
-                bool end = targets.NextMarker();
-#if SERVER_SIDE
-                //send the message of updating distractor ("n") to the other side
-                mcServer.Send(mcServer.serverStateObject.workSocket, "n");
-#endif
-
-                /*
-                Console.WriteLine("local localLogged: {0} remoteLogged : {1}", lData.LocalLogged, lData.RemoteLogged);
-                if (lData.LogLocalOrNot())
-                {
-                    lData.localX = pakage.PositionX;
-                    lData.localY = pakage.PositionY;
-                    lData.localTouchTime = stopwatch.ElapsedMilliseconds;
-                    targets.CurrentTargetGrid(ref lData.targetGridX, ref lData.targetGridY);
-                    lData.LocalLogged = true;
-                    Console.WriteLine("log local!");
-                }
-                else { Console.WriteLine("cannot log local!"); }
-                 */
-                localBeingUpdated = true;
-                if (end)
-                {
-                    OneRoundEnd();
-                }
-                else
-                {
-                    Action workAction = delegate
-                    {
-                        targets.MoveMarker();
-                    };
-                    this.Dispatcher.BeginInvoke(workAction, System.Windows.Threading.DispatcherPriority.Normal);
-                }
-            }
-            if (localBeingUpdated)
-            {
-                lData.LocalReady = true;
-                if (lData.compareLocal(t.PositionZ))
-                {
-                    lData.localX = t.PositionX;
-                    lData.localY = t.PositionY;
-                    lData.localTouchTime = stopwatch.ElapsedMilliseconds;
-                    targets.CurrentTargetGrid(ref lData.targetGridX, ref lData.targetGridY);
-                }
-                if (lData.LocalCount == 1)
-                {
-                    Console.WriteLine("local 30 times! Stop tracking local!");
-                    localBeingUpdated = false;
-                    lData.LocalLogged = true;
-                    lData.LocalCount = 0;
-                }
-            }
-        }
-
-        private void PointingExperimenterWithDistraction(TrackingData t, Point s)
-        {
-            if (targets.CurrentScheduleTable() != null)
-            {
-                bool c = (bool)(targets.CurrentScheduleTable());        //only display a target for the experimenter when the element in schedule table is TRUE
-                if (c && studyOnGoing && t.PositionZ > minZ && t.PositionZ < maxZ && targets.testTouch(s.X, s.Y))
-                {
-                   FetchSchedule();
-                   Console.WriteLine("detected!");
-                }
-            }
-        }
-
-        private void FetchSchedule()
-        {
-            Action work1 = delegate
-            {
-                targets.HideOneTarget();
-            };
-            this.Dispatcher.BeginInvoke(work1, System.Windows.Threading.DispatcherPriority.Normal);
-
-            targets.IncrementScheduleTable();
-            if (targets.CurrentScheduleTable() != null)
-            {
-
-                if ((bool)(targets.CurrentScheduleTable()) == true)
-                {
-                    Action work = delegate
-                    {
-                        targets.DisplayOneTarget();
-                    };
-                    this.Dispatcher.BeginInvoke(work, System.Windows.Threading.DispatcherPriority.Normal);
-                    mcServer.Send(mcServer.serverStateObject.workSocket, "es");         //"es" stands for "experimenter side"
-                }
-                else
-                {
-                    mcServer.Send(mcServer.serverStateObject.workSocket, "ps");         //"ps" stands for "participant side"
-                }
-            }
-            else OneRoundEnd();
-        }
-
         private void OneRoundEnd()
         {
             studyOnGoing = false;
@@ -545,7 +496,16 @@ namespace SocketTestClient
             };
             this.Dispatcher.BeginInvoke(workAction, System.Windows.Threading.DispatcherPriority.Normal);
         }
-        #endregion
+
+        private void OnRaiseTrackingEvent(TrackingEventArgs e)
+        {
+            EventHandler<TrackingEventArgs> handler = RaiseTrackingEvent;
+
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
 
         #region parse data
         private TrackingData ParsePackage(string str)
@@ -578,14 +538,7 @@ namespace SocketTestClient
             {
                 targets.Clear();
                 targets.Shuffle();
-                targets.SetCanvas(_my_canvas);
-                if ((bool)(targets.CurrentScheduleTable()))
-                {
-                    targets.DisplayOneTarget();
-                    mcServer.Send(mcServer.serverStateObject.workSocket, "esinit");
-                }
-                else mcServer.Send(mcServer.serverStateObject.workSocket, "psinit");
-                //targets.Display(_my_canvas);
+                targets.Display(_my_canvas);
             }
             if (e.Key == Key.S)
             {
@@ -595,7 +548,6 @@ namespace SocketTestClient
                 countDown.Enabled = true;
                 _countDown.Visibility = System.Windows.Visibility.Visible;
                 _countDown.Text = "3";
-                mcServer.Send(mcServer.serverStateObject.workSocket, "start");
             }
             if (e.Key == Key.P)
             {
@@ -607,7 +559,6 @@ namespace SocketTestClient
             {
                 studyOnGoing = false;
                 targets.Clear();
-                
                 logger.Close();
                 logger = null;
             }
@@ -638,7 +589,7 @@ namespace SocketTestClient
                 studyOnGoing = true;
                 if (logger == null) logger = new Logger();
                 logger.Enabled = true;
-                stopwatch.Start();
+                //stopwatch.Start();
             }
 
         }
@@ -731,7 +682,7 @@ namespace SocketTestClient
 
         public LogData()
         {
-            
+
         }
 
         public bool LogRemoteOrNot()
@@ -777,10 +728,10 @@ namespace SocketTestClient
             else
             {
                 remoteCount++;
-                if (remoteMin >　comingRemote)
+                if (remoteMin > comingRemote)
                 {
                     remoteMin = comingRemote;
-                    
+
                     return true;
                 }
                 else return false;

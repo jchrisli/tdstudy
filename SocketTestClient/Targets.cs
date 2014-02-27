@@ -40,32 +40,36 @@ namespace SocketTestClient
         private int areaRadius; //radius of the area to be selected for each round, which is set to the average of the Manhattan distance between targets
 
         //for participant task
-        private bool?[] scheduleTable;
+        //private bool?[] scheduleTable;
         static private double factor = 2;
-        private int scheduleTableIndex = 0;
+        //private int scheduleTableIndex = -1;
         private Ellipse oneTarget;
-                
+        private int targetNumber;
+
 
         public Targets()
         {
             len = xGrid * yGrid;
             //flags = new bool[len];
             //for (int i = 0; i < len; i++) flags[i] = false;
+
+            targetNumber = (int)(factor * number);
+
             targetEllipses = new Ellipse[number];
             for (int i = 0; i < number; i++)
             {
                 targetEllipses[i] = new Ellipse();
             }
-                foreach (Ellipse e in targetEllipses)
-                {
+            foreach (Ellipse e in targetEllipses)
+            {
 
-                    SolidColorBrush brush = new SolidColorBrush(Colors.DarkGoldenrod);
-                    e.Fill = brush;
-                    e.Width = size;
-                    e.Height = size;
-                    e.Stroke = new SolidColorBrush(Colors.Transparent);
-                }
-            positionList= new List<Point>();
+                SolidColorBrush brush = new SolidColorBrush(Colors.DarkGoldenrod);
+                e.Fill = brush;
+                e.Width = size;
+                e.Height = size;
+                e.Stroke = new SolidColorBrush(Colors.Transparent);
+            }
+            positionList = new List<Point>();
             marker = new Ellipse();
             marker.Width = 10;
             marker.Height = 10;
@@ -74,7 +78,7 @@ namespace SocketTestClient
 
             //initiate a 20 * 20 2d array to store the distances between targets
             distanceTable = new int[number, number];
-
+            /*
             //initiate a schedule table containing information of the relative proportion of targets between two sides
             scheduleTable = new bool?[(int)(number * (factor + 1))];
             Random r = new Random();
@@ -90,7 +94,7 @@ namespace SocketTestClient
                 scheduleTable[i] = scheduleTable[now];
                 scheduleTable[now] = temp;
             }
-
+            */
             oneTarget = new Ellipse();
             SolidColorBrush b = new SolidColorBrush(Colors.DarkGoldenrod);
             oneTarget.Fill = b;
@@ -98,7 +102,7 @@ namespace SocketTestClient
             oneTarget.Height = size;
             oneTarget.Stroke = new SolidColorBrush(Colors.Transparent);
         }
-
+        /*
         public void IncrementScheduleTable()
         {
             scheduleTableIndex++;
@@ -109,7 +113,7 @@ namespace SocketTestClient
             if (scheduleTableIndex >= scheduleTable.Length) return null;
             else return scheduleTable[scheduleTableIndex];
         }
-
+        */
         /// <summary>
         /// Must be used in a dispatcher
         /// </summary>
@@ -121,15 +125,12 @@ namespace SocketTestClient
             oneTarget.Visibility = Visibility.Hidden;
         }
 
-        /// <summary>
-        /// Increment the index of position list
-        /// </summary>
-        /// <returns>Return true if all 20 targets have been gone through</returns>
         public bool NextOneTarget()
         {
             currentPermutationIndex++;
             if (currentPermutationIndex >= number)
             {
+
                 return true;
             }
             else
@@ -141,7 +142,7 @@ namespace SocketTestClient
 
         public void DisplayOneTarget()
         {
-            if(parent != null)
+            if (parent != null)
             {
                 if (currentPermutationIndex < permutation.Length)
                 {
@@ -168,21 +169,21 @@ namespace SocketTestClient
             {
                 permutation[i] = i;
             }
-            for (int i = permutation.Length - 1; i > 0 ; i--)
+            for (int i = permutation.Length - 1; i > 0; i--)
             {
                 int now = (int)(r.NextDouble() * i);
                 int temp = permutation[i];
                 permutation[i] = permutation[now];
                 permutation[now] = temp;
             }
-            for (int i = 0; i < number; i++)
+            for (int i = 0; i < targetNumber; i++)
             {
                 //flags[permutation[i]] = true;
                 if (!matchGridToAvoid(permutation[i]))
                     positionList.Add(new Point((permutation[i] % xGrid), (int)(permutation[i] / xGrid)));
                 else
                 {
-                    if(currentBackupIndex == len) permutation[i] = 3;
+                    if (currentBackupIndex == len) permutation[i] = 3;
                     else
                     {
                         do
@@ -197,12 +198,12 @@ namespace SocketTestClient
             }
             currentPermutationIndex = 0;
             currentIndex = permutation[currentPermutationIndex];
-            currentBackupIndex = number;
+            currentBackupIndex = targetNumber;
 
             currentAreaIndex = currentIndex;
         }
 
-        
+
         bool matchGridToAvoid(int position)
         {
             int i = 0;
@@ -213,7 +214,7 @@ namespace SocketTestClient
                 else i++;
             }
             if (i == gridToAvoid.Length) return false;
-            else return true;   
+            else return true;
         }
 
         /// <summary>

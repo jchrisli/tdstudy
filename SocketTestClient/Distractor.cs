@@ -8,7 +8,7 @@ namespace SocketTestClient
 {
     class Distractor
     {
-        string path = "C:\\Users\\Jiannan\\Desktop\\WordList.txt";
+        string path = "C:\\Users\\Interactions Lab\\Desktop\\WordList.txt";
         int index = -1;
         int count;
         List<string> words;
@@ -16,16 +16,18 @@ namespace SocketTestClient
         public Distractor()
         {
             count = 0;
-            using(StreamReader sr = new StreamReader(path))
+            using (StreamReader sr = new StreamReader(path))
             {
                 words = new List<string>();
                 string line = sr.ReadLine();
-                while (sr != null)
+                //Console.WriteLine("oh!");
+                while (line != null)
                 {
                     words.Add(line);
                     count++;
                     line = sr.ReadLine();
                 }
+                Console.WriteLine(count.ToString());
             }
         }
 
@@ -38,6 +40,8 @@ namespace SocketTestClient
             else index = 0;
             return words[index];
         }
+
+
 
     }
 }

@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" WindowState="Maximized" WindowStyle="None" Height="1024" Width="1280" KeyDown="_my_canvas_KeyDown" Closing="Window_Closing" MouseMove="Window_MouseMove">
     <Canvas Width="1280" Height="1024" Name="_my_canvas" Background="Black" KeyDown="_my_canvas_KeyDown">
-        <TextBlock Canvas.Left="352" Canvas.Top="447" Height="40" Name="_position" Text="TextBlock" Width="617" FontSize="36" TextAlignment="Center" Foreground="White"/>
-        <TextBlock Canvas.Left="609" Canvas.Top="411" Height="30" Name="_coordinate" Text="TextBlock" Foreground="White" FontSize="24"/>
+        <TextBlock Canvas.Left="362" Canvas.Top="440" Height="40" Name="_position" Text="TextBlock" Width="617" FontSize="36" TextAlignment="Center" Foreground="White"/>
+        <TextBlock Canvas.Left="135" Canvas.Top="110" Height="30" Name="_coordinate" Text="TextBlock" Foreground="White" FontSize="24"/>
         <TextBlock Canvas.Left="638" Canvas.Top="485" Height="60" Name="_countDown" Text="3" TextAlignment="Center" Foreground="White" FontSize="48"/>
-        
+        <TextBlock Canvas.Left="510" Canvas.Top="600" Height="80" Name="_distractor" Text="" Width="260" Foreground="White" FontSize="50" TextAlignment="Center"/>
     </Canvas>
 </Window>

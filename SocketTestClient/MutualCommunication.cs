@@ -17,7 +17,7 @@ namespace SocketTestClient
         public StateObject clientStateObject;
         IPAddress serverIP;
         int serverPort = 12347;
-        string currentMessage = "";
+        //string currentMessage = "";
         public delegate void MessageReceivedEventHandler(object sender, MessageReceivedArgs msgRcvArgs);
         public event MessageReceivedEventHandler RaiseMsgRcvEvent;
 
@@ -60,9 +60,6 @@ namespace SocketTestClient
             // Create the state object.
             serverStateObject = new StateObject();
             serverStateObject.workSocket = handler;
-
-            handler.NoDelay = true;
-
             handler.BeginReceive(serverStateObject.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReadCallback), serverStateObject);
             Console.WriteLine("mutual channel established!");
@@ -96,8 +93,10 @@ namespace SocketTestClient
                 clientStateObject = new StateObject();
                 clientStateObject.workSocket = client;
 
+                client.NoDelay = true;
+
                 client.BeginReceive(clientStateObject.buffer, 0, StateObject.BufferSize, 0,
-                new AsyncCallback(ReadCallback), serverStateObject);
+                new AsyncCallback(ReadCallback), clientStateObject);
             }
             catch (Exception e)
             {
@@ -107,8 +106,6 @@ namespace SocketTestClient
 
         private void ReadCallback(IAsyncResult ar)
         {
-            String content = String.Empty;
-
             // Retrieve the state object and the handler socket
             // from the asynchronous state object.
             StateObject state = (StateObject)ar.AsyncState;
@@ -120,6 +117,7 @@ namespace SocketTestClient
             if (bytesRead > 0)
             {
                 // There  might be more data, so store the data received so far.
+                //Console.WriteLine("read {0} bytes", bytesRead);
                 string dataStr = Encoding.ASCII.GetString(
                     state.buffer, 0, bytesRead);
                 MessageReceivedArgs args = new MessageReceivedArgs(dataStr);

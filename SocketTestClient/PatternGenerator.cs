@@ -36,6 +36,7 @@ namespace SocketTestClient
         {
             mainWindow = m;
             patternBmp = new Bitmap(canvasWid, canvasHei, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            img = new System.Windows.Controls.Image();
         }
 
         public void AddToParent(Canvas c)
@@ -95,7 +96,7 @@ namespace SocketTestClient
                     level = 0.9;
                     break;
                 case ConfigStatus.BckgrdSts.Level2:
-                    level = .96;
+                    level = 1;
                     break;
                 default:
                     level = 0;

@@ -77,34 +77,33 @@ C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\681Studies\temp\SocketTes
 C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\681Studies\Demo\SocketTestClient_other\SocketTestClient\bin\Debug\SocketTestClient.exe.config
 C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\681Studies\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient.exe
 C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\681Studies\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient.pdb
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\bin\Debug\SocketTestClient.exe.config
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient.exe
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient.pdb
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\bin\Debug\SocketTestClient.exe
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\bin\Debug\SocketTestClient.pdb
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\Configuration.baml
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\MainWindow.baml
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\Configuration.g.cs
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\MainWindow.g.cs
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\App.g.cs
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient_MarkupCompile.cache
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient.g.resources
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient.Properties.Resources.resources
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\GenerateResource.read.1.tlog
-C:\Users\Jiannan\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\GenerateResource.write.1.tlog
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\bin\Debug\SocketTestClient.exe.config
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.exe
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.pdb
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\bin\Debug\SocketTestClient.exe
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\bin\Debug\SocketTestClient.pdb
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\Configuration.baml
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\MainWindow.baml
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\Configuration.g.cs
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\MainWindow.g.cs
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\App.g.cs
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient_MarkupCompile.cache
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.g.resources
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.Properties.Resources.resources
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.csprojResolveAssemblyReference.cache
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.csproj.GenerateResource.Cache
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\bin\Debug\SocketTestClient.exe.config
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient.exe
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient.pdb
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient.csprojResolveAssemblyReference.cache
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\Configuration.baml
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\MainWindow.baml
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\Configuration.g.cs
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\MainWindow.g.cs
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\App.g.cs
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient_MarkupCompile.cache
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient.g.resources
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient.Properties.Resources.resources
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\obj\x86\Debug\SocketTestClient.csproj.GenerateResource.Cache
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\bin\Debug\SocketTestClient.exe
+C:\Users\Interactions Lab\Downloads\681_archive\681_archive\Software\Demo\SocketTestClient_other\SocketTestClient\bin\Debug\SocketTestClient.pdb
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\bin\Debug\SocketTestClient.exe.config
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.exe
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.pdb
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.csprojResolveAssemblyReference.cache
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\obj\x86\Debug\Configuration.baml
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\obj\x86\Debug\MainWindow.baml
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\obj\x86\Debug\Configuration.g.cs
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\obj\x86\Debug\MainWindow.g.cs
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\obj\x86\Debug\App.g.cs
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient_MarkupCompile.cache
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.g.resources
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.Properties.Resources.resources
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.csproj.GenerateResource.Cache
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\bin\Debug\SocketTestClient.exe
+C:\Users\Interactions Lab\Desktop\StudyClient\SocketTestClient\bin\Debug\SocketTestClient.pdb

@@ -116,7 +116,7 @@ namespace SocketTestClient
 
         public override void ToggleColor(bool t)
         {
-            ((Ellipse)(this.elements[0])).Fill = t ? new SolidColorBrush(Colors.Turquoise) : new SolidColorBrush(Colors.Beige);
+            ((Ellipse)(this.elements[0])).Fill = t ? new SolidColorBrush(Colors.Turquoise) : new SolidColorBrush(Colors.Orange);
         }
 
     }
