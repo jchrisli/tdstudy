@@ -98,7 +98,6 @@ C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\S
 C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.pdb
 C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\bin\Debug\SocketTestClient.exe
 C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\bin\Debug\SocketTestClient.pdb
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\Configuration.baml
 C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\MainWindow.baml
 C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\Configuration.g.cs
@@ -107,5 +106,5 @@ C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\S
 C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient_MarkupCompile.cache
 C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.g.resources
 C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.Properties.Resources.resources
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\GenerateResource.read.1.tlog
-C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.csprojResolveAssemblyReference.cache
+C:\Users\Jiannan\Documents\Visual Studio 2010\Projects\ThesisStudy\StudyClient\SocketTestClient\obj\x86\Debug\SocketTestClient.csproj.GenerateResource.Cache

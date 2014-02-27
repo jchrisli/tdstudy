@@ -183,11 +183,7 @@ namespace SocketTestClient
                 switch (dataArray[0])
                 {
                     case "pt":
-                        if (targets.CurrentScheduleTable() != null)
-                        {
-                            NextSchedule();
-                        }
-                        else OneRoundEnd();
+                        FetchSchedule();
                         break;
                     default:
                         break;
@@ -329,7 +325,7 @@ namespace SocketTestClient
             };
             this.Dispatcher.Invoke(displayAction, System.Windows.Threading.DispatcherPriority.Normal);
 #if SERVER_SIDE
-            PointingExperimenter(pakage, screenCoordinate);
+            PointingExperimenterWithDistraction(pakage, screenCoordinate);
 #endif
         }
 
@@ -502,16 +498,24 @@ namespace SocketTestClient
                 bool c = (bool)(targets.CurrentScheduleTable());        //only display a target for the experimenter when the element in schedule table is TRUE
                 if (c && studyOnGoing && t.PositionZ > minZ && t.PositionZ < maxZ && targets.testTouch(s.X, s.Y))
                 {
-                   
+                   FetchSchedule();
+                   Console.WriteLine("detected!");
                 }
             }
         }
 
-        private void NextSchedule()
+        private void FetchSchedule()
         {
+            Action work1 = delegate
+            {
+                targets.HideOneTarget();
+            };
+            this.Dispatcher.BeginInvoke(work1, System.Windows.Threading.DispatcherPriority.Normal);
+
             targets.IncrementScheduleTable();
             if (targets.CurrentScheduleTable() != null)
             {
+
                 if ((bool)(targets.CurrentScheduleTable()) == true)
                 {
                     Action work = delegate
@@ -519,6 +523,11 @@ namespace SocketTestClient
                         targets.DisplayOneTarget();
                     };
                     this.Dispatcher.BeginInvoke(work, System.Windows.Threading.DispatcherPriority.Normal);
+                    mcServer.Send(mcServer.serverStateObject.workSocket, "es");         //"es" stands for "experimenter side"
+                }
+                else
+                {
+                    mcServer.Send(mcServer.serverStateObject.workSocket, "ps");         //"ps" stands for "participant side"
                 }
             }
             else OneRoundEnd();
@@ -569,7 +578,14 @@ namespace SocketTestClient
             {
                 targets.Clear();
                 targets.Shuffle();
-                targets.Display(_my_canvas);
+                targets.SetCanvas(_my_canvas);
+                if ((bool)(targets.CurrentScheduleTable()))
+                {
+                    targets.DisplayOneTarget();
+                    mcServer.Send(mcServer.serverStateObject.workSocket, "esinit");
+                }
+                else mcServer.Send(mcServer.serverStateObject.workSocket, "psinit");
+                //targets.Display(_my_canvas);
             }
             if (e.Key == Key.S)
             {
@@ -579,6 +595,7 @@ namespace SocketTestClient
                 countDown.Enabled = true;
                 _countDown.Visibility = System.Windows.Visibility.Visible;
                 _countDown.Text = "3";
+                mcServer.Send(mcServer.serverStateObject.workSocket, "start");
             }
             if (e.Key == Key.P)
             {
@@ -590,6 +607,7 @@ namespace SocketTestClient
             {
                 studyOnGoing = false;
                 targets.Clear();
+                
                 logger.Close();
                 logger = null;
             }

@@ -42,7 +42,7 @@ namespace SocketTestClient
         //for participant task
         private bool?[] scheduleTable;
         static private double factor = 2;
-        private int scheduleTableIndex = -1;
+        private int scheduleTableIndex = 0;
         private Ellipse oneTarget;
                 
 
@@ -121,6 +121,23 @@ namespace SocketTestClient
             oneTarget.Visibility = Visibility.Hidden;
         }
 
+        /// <summary>
+        /// Increment the index of position list
+        /// </summary>
+        /// <returns>Return true if all 20 targets have been gone through</returns>
+        public bool NextOneTarget()
+        {
+            currentPermutationIndex++;
+            if (currentPermutationIndex >= number)
+            {
+                return true;
+            }
+            else
+            {
+                currentIndex = permutation[currentPermutationIndex];
+                return false;
+            }
+        }
 
         public void DisplayOneTarget()
         {
